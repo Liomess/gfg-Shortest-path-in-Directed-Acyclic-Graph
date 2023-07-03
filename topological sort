@@ -1,0 +1,28 @@
+from typing import List
+class Solution:
+    def shortestPath(self, n : int, m : int, edges : List[List[int]]) -> List[int]:
+        def dfs(vis,i,adj,stack):
+            vis[i]=1
+            for val,wt in adj[i]:
+                if vis[val]==0:
+                    dfs(vis,val,adj,stack)
+            stack.append(i)
+        adj=[[]for i in range(n)]
+        for i in range(m):
+            adj[edges[i][0]].append([edges[i][1],edges[i][2]])
+        vis=[0]*n
+        stack=[]
+        for i in range(n):
+            if vis[i]==0:
+                dfs(vis,i,adj,stack)
+        ans=[float('inf')]*n
+        ans[0]=0
+        while stack:
+            node=stack.pop()
+            for val,wt in adj[node]:
+                if (wt+ans[node])<ans[val]:
+                    ans[val]=wt+ans[node]
+        for i in range(n):
+            if ans[i]==float('inf'):
+                ans[i]=-1
+        return ans
